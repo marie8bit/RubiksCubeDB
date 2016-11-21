@@ -35,11 +35,12 @@ public class CubeDB {
     //identify user information for DB connection
     static final String USER = "Marie";
     static final String PASSWORD = "tryapassphrase";
-    public static void main(String[] args)throws Exception {
+
+    CubeDB()throws Exception {
         Class.forName(JDBC_DRIVER);
         //generate connection to DB
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
-        Statement statement = connection.createStatement();
+        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         Scanner scanner = new Scanner(System.in);
         //create table if it doesn't already exist
         statement.execute("Create table if not EXISTS records (holder varchar(150), record float)");
@@ -66,99 +67,131 @@ public class CubeDB {
             psInsert.executeUpdate();
         }
         //method to print table data
-        printAllRows(connection);
-        int caa = chooseAnAction();
+//        printAllRows(connection);
+//        int caa = chooseAnAction();
 
 
 
         //allows user to add multiple entries
-        while(caa!=3){
-            switch (caa) {
-                case 1: {
-
-                    System.out.println("Emter the record holder");
-                    String updholder = scanner.nextLine();
-                    psInsert.setString(1, updholder);
-                    //validate user input
-                    while (true) {
-                        try {
-                            System.out.println("Enter the record time as (minutes).(seconds)");
-                            double updrecord = Double.parseDouble(scanner.nextLine());
-                            psInsert.setDouble(2, updrecord);
-                            break;
-                        } catch (NumberFormatException nfe) {
-                            System.out.println("Please enter a numeric value");
-                        }
-                    }
-                    //executes prepared statement, setting data in table
-                    psInsert.executeUpdate();
-                    //prints whole table (not a good idea for large tables
-                    printAllRows(connection);
-                    //add multiple entries
-                    caa = chooseAnAction();
-                }
-                case 2:{
-                    //use prepared statement to udpate data in the db
-                    String prepStatUpdate = "update records set record  = ? where holder like ?";
-                    PreparedStatement psUpdate = connection.prepareStatement((prepStatUpdate));
-                    System.out.println("Enter the record holders last name");
-                    //add % sign to allow for partial holder entries
-                    String name = "%"+scanner.nextLine()+"%";
-                    psUpdate.setString(2,name);
-                    while (true) {
-                        try {
-                            System.out.println("Enter the record time as (minutes).(seconds)");
-                            double updrecord = Double.parseDouble(scanner.nextLine());
-                            psUpdate.setDouble(1, updrecord);
-                            break;
-                        } catch (NumberFormatException nfe) {
-                            System.out.println("Please enter a numeric value");
-                        }
-                    }
-
-                    psUpdate.executeUpdate();
-                    //prints whole table (not a good idea for large tables
-                    printAllRows(connection);
-                    //add multiple entries
-                    caa = chooseAnAction();
-
-                }
-            }
-        }
-        System.out.println("Goodbye!");
-        connection.close();
-        psInsert.close();
+//        while(caa!=3){
+//            switch (caa) {
+//                case 1: {
+//
+//                    System.out.println("Emter the record holder");
+//                    String updholder = scanner.nextLine();
+//                    psInsert.setString(1, updholder);
+//                    //validate user input
+//                    while (true) {
+//                        try {
+//                            System.out.println("Enter the record time as (minutes).(seconds)");
+//                            double updrecord = Double.parseDouble(scanner.nextLine());
+//                            psInsert.setDouble(2, updrecord);
+//                            break;
+//                        } catch (NumberFormatException nfe) {
+//                            System.out.println("Please enter a numeric value");
+//                        }
+//                    }
+//                    //executes prepared statement, setting data in table
+//                    psInsert.executeUpdate();
+//                    //prints whole table (not a good idea for large tables
+//                    printAllRows(connection);
+//                    //add multiple entries
+//                    caa = chooseAnAction();
+//                }
+//                case 2:{
+//                    //use prepared statement to udpate data in the db
+//                    String prepStatUpdate = "update records set record  = ? where holder like ?";
+//                    PreparedStatement psUpdate = connection.prepareStatement((prepStatUpdate));
+//                    System.out.println("Enter the record holders last name");
+//                    //add % sign to allow for partial holder entries
+//                    String name = "%"+scanner.nextLine()+"%";
+//                    psUpdate.setString(2,name);
+//                    while (true) {
+//                        try {
+//                            System.out.println("Enter the record time as (minutes).(seconds)");
+//                            double updrecord = Double.parseDouble(scanner.nextLine());
+//                            psUpdate.setDouble(1, updrecord);
+//                            break;
+//                        } catch (NumberFormatException nfe) {
+//                            System.out.println("Please enter a numeric value");
+//                        }
+//                    }
+//
+//                    psUpdate.executeUpdate();
+//                    //prints whole table (not a good idea for large tables
+//                    printAllRows(connection);
+//                    //add multiple entries
+//                    caa = chooseAnAction();
+//
+//                }
+//            }
+//        }
+//        System.out.println("Goodbye!");
+        //connection.close();
+        //psInsert.close();
     }
     //provide user with options for interacting with the database
-    private static int chooseAnAction() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose an action");
-        System.out.println("1. Add an entry");
-        System.out.println("2. Update a record");
-        System.out.println("3. Quit");
-        String s = scanner.nextLine();
-        int i=0;
-        while (true) {
-            try {
-                i = Integer.parseInt(s);
-                break;
-            } catch (NumberFormatException nfe) {
-                System.out.println("Please enter a numeric value");
-            }
-        }
+//    private static int chooseAnAction() {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Choose an action");
+//        System.out.println("1. Add an entry");
+//        System.out.println("2. Update a record");
+//        System.out.println("3. Quit");
+//        String s = scanner.nextLine();
+//        int i=0;
+//        while (true) {
+//            try {
+//                i = Integer.parseInt(s);
+//                break;
+//            } catch (NumberFormatException nfe) {
+//                System.out.println("Please enter a numeric value");
+//            }
+//        }
+//
+//        return i;
+//    }
 
-        return i;
-    }
+//    private static void printAllRows() throws Exception{
+//        //get rows from db table
+//        Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
+//        String getResultsQuery = "Select * from records";
+//        try {
+//            //create db connection
+//            PreparedStatement getResultsStatement = connection.prepareStatement(getResultsQuery);
+//            //get result set from db
+//            ResultSet rs = getResultsStatement.executeQuery();
+//            //System.out.println("Rubik's Cude solution records");
+//            int numberOfResults = 0;
+//            //get row data variables and display information to the user
+//            while (rs.next()) {
+//                numberOfResults++;
+//                String holder = rs.getString("holder");
+//                double record = rs.getDouble("record");
+//                System.out.println("Record holder: " + holder + " Time: " + record);
+//            }
+//            //provideuser friendly experience
+//            if (numberOfResults == 0) {
+//                System.out.println("No records found in database");
+//            }
+//            rs.close();
+//
+//        }
+//        //handle db exceptions
+//        catch (SQLException se){
+//            System.out.println("Database Error");
+//        }
+//        connection.close();
+//    }
+    public static ResultSet getMyResultSet() throws Exception{
+//        try {
+            Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
+            String getResultsQuery = "Select * from records";
 
-    private static void printAllRows(Connection connection) {
-        //get rows from db table
-        String getResultsQuery = "Select * from records";
-        try {
             //create db connection
             PreparedStatement getResultsStatement = connection.prepareStatement(getResultsQuery);
             //get result set from db
             ResultSet rs = getResultsStatement.executeQuery();
-            System.out.println("Rubik's Cude solution records");
+            //System.out.println("Rubik's Cude solution records");
             int numberOfResults = 0;
             //get row data variables and display information to the user
             while (rs.next()) {
@@ -172,10 +205,14 @@ public class CubeDB {
                 System.out.println("No records found in database");
             }
 
-        }
-        //handle db exceptions
-        catch (SQLException se){
-            System.out.println("Database Error");
-        }
+            //rs.close();
+            //connection.close();
+            return rs;
+//        }
+//        //handle db exceptions
+//        catch (SQLException se) {
+//            System.out.println("Database Error");
+//        }
+//        return rs;
     }
 }
