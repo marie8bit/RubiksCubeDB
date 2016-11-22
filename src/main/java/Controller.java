@@ -18,7 +18,7 @@ public class Controller {
 
             TableModel recordsModel = new TableModel(rs);
             //Create and show the GUI
-            RubiksCubeForm tableGUI = new RubiksCubeForm(recordsModel);
+            RubiksCubeForm tableGUI = new RubiksCubeForm(recordsModel, db);
 
         } catch (Exception e) {
             e.printStackTrace();

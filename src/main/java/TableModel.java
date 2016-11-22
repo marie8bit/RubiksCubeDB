@@ -34,7 +34,10 @@ public class TableModel extends AbstractTableModel {
             sqle.printStackTrace();
         }
     }
-
+    @Override
+    public boolean isCellEditable(int col, int row){
+        return true;
+    }
     @Override
     public int getRowCount() {
         return numberOfRows;

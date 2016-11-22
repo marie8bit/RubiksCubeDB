@@ -16,6 +16,8 @@
         </constraints>
         <properties>
           <cellSelectionEnabled value="true"/>
+          <editingColumn value="-1"/>
+          <editingRow value="-1"/>
         </properties>
       </component>
       <component id="21f20" class="javax.swing.JButton" binding="button1" default-binding="true">
