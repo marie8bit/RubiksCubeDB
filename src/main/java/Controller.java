@@ -47,6 +47,7 @@ public class Controller {
             }
         } catch (SQLException se) {
             se.printStackTrace();
+
         }
 
         //And then the connection

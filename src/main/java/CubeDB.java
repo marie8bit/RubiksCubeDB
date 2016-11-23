@@ -184,39 +184,55 @@ public class CubeDB {
 //    }
     public static ResultSet updateResultSet( int column, String newNalue, String oldValue)throws Exception{
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
-        switch (column) {
-            case 1: {
-                String prepStatUpdate = "update records set holder = ? where holder = ?";
-                PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
-                psUpdate.setString(1,newNalue);
-                psUpdate.setString(2,oldValue);
+
+        //Connection connection = Controller.connection;
+        if (column==0){
+            String prepStatUpdate = "update records set holder = ? where holder = ?";
+            PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
+            psUpdate.setString(1,newNalue);
+            psUpdate.setString(2,oldValue);
+            try {
                 psUpdate.executeUpdate();
-
             }
-            case 2:{
-                String prepStatUpdate = "update records set record = ? where record = ?";
-                PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
-                Double dNew = Double.parseDouble(newNalue);
-                Double dOld = Double.parseDouble(oldValue);
-                psUpdate.setDouble(1,dNew);
-                psUpdate.setDouble(2,dOld);
-                psUpdate.executeUpdate();
-
+            catch (SQLException sq){
+                System.out.println("here2");
             }
-
+            ResultSet rs = getMyResultSet();
+            return rs;
         }
-        ResultSet rs = getMyResultSet();
-        return rs;
+        else{
+            String prepStatUpdate = "update records set record = ?  where holder = ?";
+            PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
+            System.out.println(newNalue);
+            Double dNew = Double.parseDouble(newNalue);
+            //Double dOld = Double.parseDouble(oldValue);
+
+            psUpdate.setDouble(1,dNew);
+            psUpdate.setString(2,oldValue);
+            try {
+                psUpdate.executeUpdate();
+            }
+            catch (SQLException sq){
+                System.out.println("here3");
+                sq.printStackTrace();
+            }
+            ResultSet rs = getMyResultSet();
+            return rs;
+        }
+
+
+
+
 
     }
     public static ResultSet getMyResultSet() throws Exception{
 //        try {
             Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
-            String getResultsQuery = "Select * from records";
+        String getResultsQuery = "Select * from records";
 
-            //create db connection
-            PreparedStatement getResultsStatement = connection.prepareStatement(getResultsQuery);
-            //get result set from db
+        //create db connection
+        PreparedStatement getResultsStatement = connection.prepareStatement(getResultsQuery);
+        //get result set from db
             ResultSet rs = getResultsStatement.executeQuery();
             //System.out.println("Rubik's Cude solution records");
             int numberOfResults = 0;
@@ -241,5 +257,39 @@ public class CubeDB {
 //            System.out.println("Database Error");
 //        }
 //        return rs;
+    }
+
+    public static ResultSet deleteRow(String primary) throws Exception{
+        Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
+            String prepStatUpdate = "delete from records where holder = ?";
+            PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
+            psUpdate.setString(1,primary);
+            try {
+                psUpdate.executeUpdate();
+            }
+            catch (SQLException sq){
+                System.out.println("here4");
+            }
+            ResultSet rs = getMyResultSet();
+            return rs;
+
+
+    }
+
+    public static ResultSet addRow(String primary, String amount) throws Exception{
+        Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
+        String prepStatUpdate = "insert into records values (?,?)";
+        PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
+        psUpdate.setString(1,primary);
+        psUpdate.setDouble(2,Double.parseDouble(amount));
+        try {
+            psUpdate.executeUpdate();
+        }
+        catch (SQLException sq){
+            System.out.println("here4");
+        }
+        ResultSet rs = getMyResultSet();
+        return rs;
+
     }
 }
