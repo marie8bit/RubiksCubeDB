@@ -37,6 +37,7 @@ public class CubeDB {
     static final String PASSWORD = "tryapassphrase";
 
     CubeDB()throws Exception {
+        //constructor for database adds data if none is present
         Class.forName(JDBC_DRIVER);
         //generate connection to DB
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
@@ -182,11 +183,13 @@ public class CubeDB {
 //        }
 //        connection.close();
 //    }
+    //update method for database object
     public static ResultSet updateResultSet( int column, String newNalue, String oldValue)throws Exception{
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
 
         //Connection connection = Controller.connection;
         if (column==0){
+            //different sql updates depending on which column is edited using prepared statements
             String prepStatUpdate = "update records set holder = ? where holder = ?";
             PreparedStatement psUpdate = connection.prepareStatement(prepStatUpdate);
             psUpdate.setString(1,newNalue);
@@ -197,6 +200,7 @@ public class CubeDB {
             catch (SQLException sq){
                 System.out.println("here2");
             }
+            //return new result set to gui form
             ResultSet rs = getMyResultSet();
             return rs;
         }
@@ -225,7 +229,8 @@ public class CubeDB {
 
 
     }
-    public static ResultSet getMyResultSet() throws Exception{
+    //print line is used for testing but isn't part of app
+    public static ResultSet getMyResultSet() throws Exception{ //throws the exception to the method call location
 //        try {
             Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
         String getResultsQuery = "Select * from records";
@@ -237,16 +242,16 @@ public class CubeDB {
             //System.out.println("Rubik's Cude solution records");
             int numberOfResults = 0;
             //get row data variables and display information to the user
-            while (rs.next()) {
-                numberOfResults++;
-                String holder = rs.getString("holder");
-                double record = rs.getDouble("record");
-                System.out.println("Record holder: " + holder + " Time: " + record);
-            }
-            //provideuser friendly experience
-            if (numberOfResults == 0) {
-                System.out.println("No records found in database");
-            }
+//            while (rs.next()) {
+//                numberOfResults++;
+//                String holder = rs.getString("holder");
+//                double record = rs.getDouble("record");
+//                System.out.println("Record holder: " + holder + " Time: " + record);
+//            }
+//            //provideuser friendly experience
+//            if (numberOfResults == 0) {
+//                System.out.println("No records found in database");
+//            }
 
             //rs.close();
             //connection.close();
@@ -258,7 +263,7 @@ public class CubeDB {
 //        }
 //        return rs;
     }
-
+        //delete method using prepared statements returns the new resultSet
     public static ResultSet deleteRow(String primary) throws Exception{
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
             String prepStatUpdate = "delete from records where holder = ?";
@@ -275,7 +280,7 @@ public class CubeDB {
 
 
     }
-
+        //add new record using prepared statements returns the new resultSet
     public static ResultSet addRow(String primary, String amount) throws Exception{
         Connection connection = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
         String prepStatUpdate = "insert into records values (?,?)";

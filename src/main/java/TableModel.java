@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Marie on 11/20/2016.
+ * Table model class with overridden isCellEditable property and get vallue at method
  */
 public class TableModel extends AbstractTableModel {
     ResultSet resultSet;

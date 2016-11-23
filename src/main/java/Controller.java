@@ -5,23 +5,27 @@ import java.sql.Statement;
 
 /**
  * Created by Marie on 11/20/2016.
+ * controller class to intatiate db class and gui form
  */
 public class Controller {
+    //creates class constants
     static Connection connection = null;
     static Statement statement = null;
     static ResultSet rs = null;
-    public static void main(String[] args)throws Exception {
-        CubeDB db;
-        db = new CubeDB();
-        rs = db.getMyResultSet();
+    public static void main(String[] args) {
+        //instaniate dn
         try {
-
+            CubeDB db;
+            db = new CubeDB();
+            //initialize result set for jtable
+            rs = db.getMyResultSet();
             TableModel recordsModel = new TableModel(rs);
             //Create and show the GUI
-            RubiksCubeForm tableGUI = new RubiksCubeForm(recordsModel, db);
-
+            RubiksCubeForm tableGUI = new RubiksCubeForm(recordsModel);
+        //catch exceptions
         } catch (Exception e) {
             e.printStackTrace();
+            //closes the program
             System.exit(-1);
         }
     }
